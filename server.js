@@ -106,7 +106,7 @@ function buildHTML() {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>نظام تسجيل بيانات المستفيدين</title>
+<title>نظام متابعة طلبات الدعم الفني</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -222,7 +222,7 @@ td{padding:10px 13px;font-size:13px;color:var(--g6);vertical-align:middle}
     <div style="display:flex;align-items:center;gap:9px">
       <div class="logo">&#128203;</div>
       <div>
-        <div class="hdr-t">نظام تسجيل بيانات المستفيدين</div>
+        <div class="hdr-t">نظام متابعة طلبات الدعم الفني</div>
         <div class="hdr-s"><span class="dot"></span><span id="hsub">جاري التحميل...</span></div>
       </div>
     </div>
@@ -316,12 +316,17 @@ async function renderPage() {
   else renderSettings();
 }
 
+function numOnly(el) {
+  var v = el.value, r = "";
+  for (var i = 0; i < v.length; i++) { if (v[i] >= "0" && v[i] <= "9") r += v[i]; }
+  el.value = r;
+}
 function esc(s) {
   return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
 function fdt(iso) {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("ar-SA",{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"});
+  return new Date(iso).toLocaleDateString("ar",{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"});
 }
 function isOD(r) { return r.status !== "مكتمل" && r.status !== "مرفوض" && (Date.now() - new Date(r.created_at)) > 3*86400000; }
 function toast(msg, bg) {
@@ -445,7 +450,7 @@ function renderForm() {
   h += "<div class='card cb'>";
   h += "<div id='ferr' style='display:none;background:var(--r2);color:var(--r1);padding:9px 13px;border-radius:7px;margin-bottom:14px;font-size:13px;font-weight:600'></div>";
   h += "<div class='fgrid' style='margin-bottom:16px'>";
-  h += "<div><label class='lbl'>الرقم المدني *</label><input class='inp' id='fciv' value='" + esc(d.civil_id||"") + "' placeholder='ادخل الرقم المدني'></div>";
+  h += "<div><label class='lbl'>الرقم المدني *</label><input class='inp' id='fciv' value='" + esc(d.civil_id||"") + "' placeholder='ادخل الرقم المدني' inputmode='numeric' onkeypress='return event.charCode>=48&&event.charCode<=57' oninput='numOnly(this)' ></div>";
   h += "<div><label class='lbl'>نوع المعاملة *</label><input class='inp' id='ftyp' value='" + esc(d.type||"") + "' list='tlist' placeholder='اختر او اكتب نوع المعاملة'><datalist id='tlist'>";
   ST.types.forEach(function(t) { h += "<option value='" + esc(t) + "'>"; });
   h += "</datalist></div>";
@@ -479,6 +484,7 @@ async function sbm() {
   var pr  = document.getElementById("fpr").value;
   var nt  = document.getElementById("fnt").value.trim();
   if (!civ) { sfe("الرقم المدني مطلوب"); return; }
+  if (!/^[0-9]+$/.test(civ)) { sfe("الرقم المدني يجب ان يحتوي على ارقام فقط"); return; }
   if (!typ) { sfe("نوع المعاملة مطلوب"); return; }
   var b = {civil_id:civ, type:typ, status:st, priority:pr, employee:emp, notes:nt};
   var r = ST.fm === "edit" ? await api("PUT","/records/"+ST.ed.id,b) : await api("POST","/records",b);
@@ -678,7 +684,7 @@ init();
 <div id="loginbg" class="login-bg">
   <div class="login-box">
     <div class="login-logo">&#128203;</div>
-    <div class="login-title">نظام تسجيل بيانات المستفيدين</div>
+    <div class="login-title">نظام متابعة طلبات الدعم الفني</div>
     <div class="login-sub">صندوق الحماية الاجتماعية<br>الرجاء تسجيل الدخول للمتابعة</div>
     <div class="login-err" id="loginerr">اسم المستخدم أو كلمة السر غير صحيحة</div>
     <div style="margin-bottom:14px;text-align:right">
