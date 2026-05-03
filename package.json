@@ -1,0 +1,11 @@
+{
+  "name": "records-system",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo ok"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
