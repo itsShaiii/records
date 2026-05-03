@@ -13,7 +13,7 @@ const { Client } = require('pg');
 const PORT          = process.env.PORT || 3000;
 const UPLOADS_DIR   = path.join(__dirname, 'uploads');
 const SETTINGS_PASS = process.env.SETTINGS_PASS || '1234';
-const DATABASE_URL  = process.env.DATABASE_URL || 'postgresql://postgres.vpkiddvdzpaapcyzwerv:Records@2025@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres';
+const DATABASE_URL  = process.env.DATABASE_URL || 'postgresql://postgres.vpkiddvdzpaapcyzwerv:REcords123%40%5C@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres';
 
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
